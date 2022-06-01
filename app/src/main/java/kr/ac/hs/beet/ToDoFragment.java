@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,7 +29,7 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRv_todo;
     private FloatingActionButton mBtn_write;
     private ArrayList<TodoItem> mTodoItems;
-    private TodoDBHelper mDBHelper;
+    private MyDbHelper mDBHelper;
     private ToDoAdapter mAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,15 +38,15 @@ public class ToDoFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_todo, container, false);
-        mDBHelper = new TodoDBHelper(getActivity());
+        mDBHelper = new MyDbHelper(getActivity());
         mRv_todo = view.findViewById(R.id.tasksRecyclerView);
         mBtn_write = view.findViewById(R.id.fab);
         mTodoItems = new ArrayList<>();
+
         loadRecentDB(); // load recent DB
+
         mBtn_write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,10 +80,8 @@ public class ToDoFragment extends Fragment {
 
     private void loadRecentDB() { // 저장되어 있던 DB를 가져온다.
         mTodoItems = mDBHelper.getTodoList();
-        if(mAdapter == null){
-            mAdapter = new ToDoAdapter(mTodoItems, getActivity());
-            mRv_todo.setHasFixedSize(true);
-            mRv_todo.setAdapter(mAdapter);
-        }
+        mAdapter = new ToDoAdapter(mTodoItems, getActivity());
+        mRv_todo.setHasFixedSize(true);
+        mRv_todo.setAdapter(mAdapter);
     }
 }

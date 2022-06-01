@@ -38,7 +38,6 @@ public class HomeFragment extends Fragment {
     private int	uiOption;
     MyDbHelper myDbHelper;
     ViewPager2 viewPager2;
-    TodoDBHelper mTodoDBHelper;
     //ArrayList<HomeQuestList> list = new ArrayList<>();
     EditText text2;
     int count;
@@ -79,7 +78,7 @@ public class HomeFragment extends Fragment {
         list.add(new HomeQuestList("7PM go to the gym"));
         viewPager2.setAdapter(new HomeAdapter(list));*/
 
-        //QusetInit();
+        QusetInit();
 
         fragmentManager = getFragmentManager();
 
@@ -142,9 +141,21 @@ public class HomeFragment extends Fragment {
     public void QusetInit(){
         ArrayList<HomeQuestList> list = new ArrayList<>();
 
-        SQLiteDatabase db = mTodoDBHelper.getReadableDatabase();
-        mTodoDBHelper.getTodoList();
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + Todo.TABLE_NAME, null);
 
+        if(c.moveToFirst()){
+            do{
+                int col1 = c.getInt(0);
+                String col2 = c.getString(1);
+                String co13 = c.getString(2);
+                Log.i(TAG,"col1: "+ col1 + " col2: " + col2 + " col3: " + co13);
+
+                list.add(new HomeQuestList(col2));
+                viewPager2.setAdapter(new HomeAdapter(list));
+            }while (c.moveToNext());
+        }
+        c.close();
         db.close();
     }
 }

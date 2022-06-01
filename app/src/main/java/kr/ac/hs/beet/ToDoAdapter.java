@@ -22,12 +22,12 @@ import java.util.Date;
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder>{
     private ArrayList<TodoItem> mTodoItems;
     private Context mContext;
-    private TodoDBHelper mTodoDBHelper;
+    private MyDbHelper mTodoDBHelper;
 
     public ToDoAdapter(ArrayList<TodoItem> todoItems, Context mContext) {
         this.mTodoItems = todoItems;
         this.mContext = mContext;
-        mTodoDBHelper = new TodoDBHelper(mContext);
+        mTodoDBHelper = new MyDbHelper(mContext);
     }
 
     @NonNull

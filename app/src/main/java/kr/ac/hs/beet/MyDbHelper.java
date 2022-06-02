@@ -4,11 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 
 public class MyDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "Pocketpet.db";
     //Todo_db
     private static final String SQL_CREATE_TODO =
@@ -54,11 +53,11 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
 
     //TodoSELECT 문 (할 일 목록을 조회)
-    public ArrayList<TodoItem> getTodoList() {
+    public ArrayList<TodoItem> getTodoList(String date) {
         ArrayList<TodoItem> todoItems = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + Todo.TABLE_NAME + " ORDER BY writeDate DESC", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Todo.TABLE_NAME + " WHERE " + Todo.WRITEDATE + " == '" + date + "' ORDER BY writeDate DESC", null);
         if(cursor.getCount() != 0){ //조회한 데이터가 있을 때 수행
             while(cursor.moveToNext()){
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
